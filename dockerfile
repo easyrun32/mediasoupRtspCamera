@@ -1,5 +1,6 @@
 
 
+
 FROM node:18-slim
 
 # Install FFmpeg and all debugging tools (including tcpdump)
@@ -24,10 +25,10 @@ WORKDIR /app
 COPY package.json .
 
 
-COPY rtpserver.js .
+
 COPY index.js .
 COPY public public
-COPY stream.sdp .
+
 # Install dependencies and optionally build frontend
 RUN npm install
 RUN npm run build || echo "Skipping build (optional)"
@@ -41,5 +42,8 @@ EXPOSE 3000
 
 # Start the app
 CMD ["node", "index.js"]
+
+
+
 
 
