@@ -5,7 +5,7 @@ import mediasoup from 'mediasoup';
 import path from 'path';
 
 const __dirname = path.resolve();
-const RTP_IP = '127.0.0.1'; // Localhost for RTP
+const RTP_IP = process.env.hostip; // YOU MUST USE UR IP ADDRESS IPV4 FROM VULR OR UR REAL LAPTOP IP RTP
 
 const app = express();
 const server = http.createServer(app);
@@ -153,3 +153,4 @@ io.on('connection', (socket) => {
 });
 
 startMediasoup();
+
