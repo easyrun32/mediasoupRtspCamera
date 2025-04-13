@@ -11,8 +11,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-server.listen(3000, () => {
-  console.log('✅ Server running at http://127.0.0.1:3000');
+server.listen(4000, () => {
+  console.log('✅ Server running at http://127.0.0.1:4000');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
