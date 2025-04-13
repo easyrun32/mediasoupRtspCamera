@@ -1,6 +1,5 @@
 
 
-
 FROM node:18-slim
 
 # Install FFmpeg and all debugging tools (including tcpdump)
@@ -27,6 +26,7 @@ COPY package.json .
 
 
 COPY index.js .
+COPY index2.js . 
 COPY public public
 
 # Install dependencies and optionally build frontend
@@ -42,6 +42,8 @@ EXPOSE 3000
 
 # Start the app
 CMD ["node", "index.js"]
+
+
 
 
 
