@@ -5,14 +5,16 @@ import mediasoup from 'mediasoup';
 import path from 'path';
 
 const __dirname = path.resolve();
-const RTP_IP = process.env.HOST_IP; // YOU MUST USE UR IP ADDRESS IPV4 FROM VULR OR UR REAL LAPTOP IP RTP
+
+// ✅ MUST BE YOUR PUBLIC SERVER IP!
+const RTP_IP = process.env.HOST_IP; // <--- REPLACE THIS with your Vultr server's public IP
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 server.listen(4000, () => {
-  console.log('✅ Server running at http://127.0.0.1:4000');
+  console.log('✅ Server running at http://0.0.0.0:4000');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,6 +24,11 @@ let worker, router;
 const cameras = {
   cam1: {
     ssrc: 22222222,
+    producer: null,
+    transport: null,
+  },
+  cam2:{
+	ssrc: 22222222,
     producer: null,
     transport: null,
   }
@@ -49,7 +56,7 @@ const startMediasoup = async () => {
 
   for (const [camKey, cam] of Object.entries(cameras)) {
     const transport = await router.createPlainTransport({
-      listenIp: { ip: RTP_IP, announcedIp: RTP_IP },
+      listenIp: { ip: RTP_IP, announcedIp: RTP_IP }, // Binds to public IP
       rtcpMux: false,
       comedia: true
     });
@@ -89,7 +96,6 @@ const startMediasoup = async () => {
   }
 };
 
-// WebRTC Signaling (unchanged)
 io.on('connection', (socket) => {
   console.log('📱 Client connected:', socket.id);
   socket.emit('connection-success', { socketId: socket.id });
@@ -100,7 +106,7 @@ io.on('connection', (socket) => {
 
   socket.on('createWebRtcTransport', async (_, callback) => {
     const transport = await router.createWebRtcTransport({
-      listenIps: [{ ip: '0.0.0.0', announcedIp: '192.168.1.144' }],
+      listenIps: [{ ip: '0.0.0.0', announcedIp: RTP_IP }],
       enableUdp: true,
       enableTcp: true,
       preferUdp: true,
@@ -148,8 +154,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('consumer-resume', async (_, callback) => {
-    callback(); // You may choose to call await consumer.resume();
+    callback(); // optional: await consumer.resume();
   });
 });
 
 startMediasoup();
+
