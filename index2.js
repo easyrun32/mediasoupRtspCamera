@@ -153,8 +153,3 @@ io.on('connection', (socket) => {
 });
 
 startMediasoup();
-
-});
-
-startMediasoup();
-
