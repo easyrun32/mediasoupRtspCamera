@@ -5,7 +5,7 @@ import mediasoup from 'mediasoup';
 import path from 'path';
 
 const __dirname = path.resolve();
-const RTP_IP = process.env.hostip; // YOU MUST USE UR IP ADDRESS IPV4 FROM VULR OR UR REAL LAPTOP IP RTP
+const RTP_IP = process.env.HOST_IP; // YOU MUST USE UR IP ADDRESS IPV4 FROM VULR OR UR REAL LAPTOP IP RTP
 
 const app = express();
 const server = http.createServer(app);
@@ -150,6 +150,10 @@ io.on('connection', (socket) => {
   socket.on('consumer-resume', async (_, callback) => {
     callback(); // You may choose to call await consumer.resume();
   });
+});
+
+startMediasoup();
+
 });
 
 startMediasoup();
